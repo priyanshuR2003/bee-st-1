@@ -11,3 +11,5 @@ update book : {{URL}}api/books/:id
 read single book : {{URL}}api/books/:id
 
 delete book : {{URL}}api/books/:id
+
+aggregation pipeline:  {{URL}}api/books/statistics
