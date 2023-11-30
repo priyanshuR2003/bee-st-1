@@ -90,3 +90,41 @@ exports.deleteBook = async (req, res) => {
     });
   }
 };
+
+//AGGREGATION PIPELINE:
+exports.getStatistics = async (req, res) => {
+  try {
+    const statistics = await Book.aggregate([
+      {
+        $group: {
+          _id: "$genre",
+          averagePublicationYear: { $avg: { $toInt: "$publication" } },
+          totalBooks: { $sum: 1 },
+        },
+      },
+      {
+        $project: {
+          genre: "$_id",
+          _id: 0,
+          averagePublicationYear: 1,
+          totalBooks: 1,
+        },
+      },
+    ]);
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        data: statistics,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(404).json({
+      status: "error",
+      data: {
+        data: err,
+      },
+    });
+  }
+};
